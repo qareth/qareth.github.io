@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foro de dinamización · Qareth</title>
+<!-- Recuadro para Moodle: el mensaje de la semana en curso. Pública (sin código), para poder
+     incrustarla en el Foro de dinamización. ?firma=Robles|Alicia|Segura · ?hoy=AAAA-MM-DD para previsualizar. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilos.css">
+<style>
+  body { font-size: 17px; }
+  .foro { max-width: 820px; margin: 0 auto; padding: 1rem 16px 1.5rem; }
+  .foro-arriba { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1rem; }
+  .foro-eyebrow { font-family: var(--titulos); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--oro); }
+  .foro-semana { font-family: var(--titulos); color: var(--oro-claro); }
+  .foro-ahora { margin-left: 0.4rem; font-size: 0.7rem; background: var(--oro); color: #1b1209; border-radius: 999px; padding: 0.1rem 0.55rem; vertical-align: middle; }
+  .foro-nav { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.7rem 0 0.9rem; }
+  .foro-n { width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--linea);
+    background: transparent; color: var(--texto); font: 600 0.85rem var(--titulos); cursor: pointer; padding: 0; }
+  .foro-n:hover { border-color: var(--oro); }
+  .foro-n.on { background: var(--oro); color: #1b1209; border-color: var(--oro); }
+  .foro-n.candado { cursor: default; font-size: 0.75rem; opacity: 0.55; }
+  .foro-tarjeta { background: var(--panel); border: 1px solid var(--linea); border-radius: 10px; padding: 1rem 1.2rem 0.6rem; }
+  .foro-tarjeta h1 { font-family: var(--titulos); font-weight: 500; color: var(--oro-claro); font-size: 1.2rem; margin: 0 0 0.2rem; }
+  .foro-cab { color: var(--tenue); margin-bottom: 0.9rem; }
+  .foro-msg p { margin: 0 0 0.75rem; }
+  .foro-msg ul { margin: 0 0 0.75rem; padding-left: 1.3rem; }
+  .foro-msg li { margin-bottom: 0.35rem; }
+  .foro-msg a { overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main class="foro" id="foroSemana"></main>
+<script src="js/foro.js"></script>
+</body>
+</html>

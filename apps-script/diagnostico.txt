@@ -1,0 +1,7 @@
+function buscarHojaRespuestas_() {
+  const libro = SpreadsheetApp.getActiveSpreadsheet();
+  const hojas = libro.getSheets();
+  // La pestaña enlazada ahora al formulario (si se re-enlaza, Google crea otra nueva).
+  return hojas.find(h => h.getFormUrl())
+    || hojas.find(h => /respuestas|responses/i.test(h.getName())) || hojas[0];
+}

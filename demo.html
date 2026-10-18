@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía para docentes · Qareth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Solo para el profesorado: pide el código de docentes (celda B2 de la pestaña «Acceso»). -->
+<script src="js/config.js"></script>
+<script>
+  // La guía es siempre demostración (pide el código de docentes) y no pregunta el docente.
+  window.QARETH_DEMO_PAGE = true;
+  window.QARETH_SIN_DOCENTE = true;
+</script>
+<script src="js/acceso.js"></script>
+<style>
+  .guia { max-width: 900px; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+  .guia h1 { font-family: var(--titulos); color: var(--oro-claro); text-align: center; font-weight: 500; margin: 1rem 0 0.3rem; }
+  .guia .lead { text-align: center; color: var(--tenue); margin: 0 auto 1.2rem; max-width: 62ch; }
+  .indice { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin: 0 auto 2rem; }
+  .indice a { font-family: var(--titulos); font-size: 0.8rem; color: var(--oro-claro); border: 1px solid var(--linea); border-radius: 999px; padding: 0.25rem 0.8rem; text-decoration: none; }
+  .indice a:hover { border-color: var(--oro); }
+  .guia section { scroll-margin-top: 4.5rem; margin-bottom: 1.8rem; }
+  .guia h2 { font-family: var(--titulos); font-weight: 500; color: var(--oro-claro); font-size: 1.25rem; margin: 0 0 0.8rem; }
+  .guia p { margin: 0.4rem 0; }
+  .guia ol, .guia ul { margin: 0.4rem 0 0.6rem; padding-left: 1.3rem; }
+  .guia li { margin-bottom: 0.3rem; }
+  .guia a:not(.boton) { color: var(--oro-claro); }
+  .tabla { width: 100%; border-collapse: collapse; }
+  .tabla th, .tabla td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--linea); vertical-align: top; }
+  .tabla th { font-family: var(--titulos); font-weight: 500; font-size: 0.8rem; color: var(--tenue); letter-spacing: 0.05em; }
+  .paso { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.9rem; margin-bottom: 1.1rem; }
+  .paso .num { width: 2.4rem; height: 2.4rem; border-radius: 50%; display: grid; place-items: center; background: var(--oro); color: #1b1209; font-family: var(--titulos); font-weight: 700; }
+  .paso h3 { font-family: var(--titulos); font-weight: 500; color: var(--oro-claro); font-size: 1.05rem; margin: 0.25rem 0 0.3rem; }
+  .paso .boton { margin-top: 0.3rem; }
+  .mensaje { white-space: pre-wrap; background: rgba(0, 0, 0, 0.35); border: 1px solid var(--linea); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.98rem; margin: 0.6rem 0; }
+  .nota { color: var(--tenue); font-size: 0.95rem; }
+  code { background: rgba(0, 0, 0, 0.35); border: 1px solid var(--linea); border-radius: 4px; padding: 0 0.3rem; font-size: 0.9em; overflow-wrap: anywhere; }
+  .copiado { color: #9fd49f; margin-left: 0.6rem; }
+  .foro-firma { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0 1rem; }
+  .foro-firma .boton { margin: 0; }
+  .foro-sem { border: 1px solid var(--linea); border-radius: 8px; padding: 0.6rem 0.9rem; margin-bottom: 0.6rem; }
+  .foro-sem summary { cursor: pointer; }
+  .foro-tit { font-family: var(--titulos); color: var(--oro-claro); }
+  .foro-cab { display: block; color: var(--tenue); font-size: 0.95rem; margin-left: 1.1rem; }
+  .foro-ahora { margin-left: 0.5rem; font-size: 0.75rem; background: var(--oro); color: #1b1209; border-radius: 999px; padding: 0.1rem 0.55rem; }
+  .foro-msg { white-space: normal; }
+  .foro-h3 { font-family: var(--titulos); font-weight: 500; color: var(--oro-claro); font-size: 1.02rem; margin: 1.3rem 0 0.4rem; }
+  .foro-codigo { font-family: Consolas, monospace; font-size: 0.85rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+  #foroVer { margin-left: 0.4rem; }
+  .foro-msg p { margin: 0 0 0.7rem; }
+  .foro-msg a { overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <a class="marca" href="index.html">Qareth</a>
+</header>
+
+<main class="guia">
+  <h1>Guía para docentes</h1>
+  <p class="lead">Todo lo necesario para dar las clases con Qareth: los enlaces, una demostración de la web,
+    qué explicar al alumnado y cómo seguir sus retos. Esta página es solo para el profesorado.</p>
+
+  <nav class="indice" aria-label="Apartados">
+    <a href="#que-es">Qué es Qareth</a>
+    <a href="#probar">Probar la web</a>
+    <a href="#enlaces">Enlaces</a>
+    <a href="#copias">Copias de Genially</a>
+    <a href="#explicar">Qué explicar</a>
+    <a href="#foro">Foro semanal</a>
+    <a href="#curso">Durante el curso</a>
+  </nav>
+
+  <!-- 0. Qué es Qareth (de mis-fondos/Qareth_explicación profes.pdf) -->
+  <section class="panel" id="que-es">
+    <h2>Qué es Qareth</h2>
+    <p>Qareth es una capa narrativa y voluntaria que acompaña a la asignatura.</p>
+    <p>El alumnado entra como «mediadores» en Qareth, un mundo gobernado por el Consejo de las Grandes Casas que ha
+      empezado a delegar demasiadas decisiones en Ithera, una inteligencia artificial.</p>
+    <p>Su misión es revisar esas decisiones con criterio docente. Es precisamente uno de los ejes de la asignatura:
+      aprender a utilizar la IA sin cederle aquello que exige juicio, supervisión y responsabilidad humana.</p>
+
+    <h3 class="foro-h3">Cómo encaja con la asignatura</h3>
+    <ul>
+      <li>Cada uno de los <b>8 temas se convierte en un enclave del mapa</b> de Qareth: el Mapa de las Necesidades,
+        el Consejo de los Aprendices, el Mercado de los Oráculos, la Forja de los Contenidos, etc.</li>
+      <li>En <b>cada enclave aparece un problema</b> relacionado con el contenido académico del tema, porque se ha
+        delegado demasiado en Ithera o se ha usado sin suficiente criterio.</li>
+      <li>Cada enclave tiene <b>un reto voluntario</b>, una práctica breve relacionada con el tema.</li>
+      <li>Al completar <b>el reto, consigue la insignia</b> del enclave y se activa una nueva conexión en la Gran
+        Esfera Armilar del Consejo.</li>
+      <li>Cuando se completan las ocho conexiones, la Gran Esfera revela el desenlace de la historia.</li>
+    </ul>
+
+    <h3 class="foro-h3">Lo importante</h3>
+    <ul>
+      <li>Las <b>Actividades 1, 2 y 3 siguen siendo las actividades evaluables oficiales</b> y las realiza todo el
+        alumnado.</li>
+      <li><b>Los retos</b> no sustituyen esas actividades; <b>funcionan como pequeñas prácticas de entrenamiento</b>.</li>
+    </ul>
+
+    <h3 class="foro-h3">Qué hacemos las profesoras</h3>
+    <ul>
+      <li>Cada semana se publica en el foro un <b>mensaje dinamizador</b> que hace avanzar un poco la historia,
+        anticipa el tema que se va a trabajar, propone un recurso previo y recuerda los retos o entregas de esa semana.</li>
+      <li>El foro funciona como un <b>tablón informativo</b>; no requiere que el alumnado responda, hay que dejarlo
+        bloqueado.</li>
+      <li>En la narrativa, cada profesora representa una de las Grandes Casas de Qareth, por eso firma los mensajes
+        como «La Casa de [apellido o nombre]» (por ejemplo, «La Casa de Robles» o «La Casa de Alicia»).</li>
+    </ul>
+  </section>
+
+  <!-- 1. Probar la web -->
+  <section class="panel" id="probar">
+    <h2>Probar la web</h2>
+    <p class="nota">Cada botón abre esa parte de la web en una pestaña nueva, en modo demostración: mediadores inventados
+      y ningún dato real. Dentro puedes moverte por el menú y la demostración se mantiene.</p>
+
+    <div class="paso"><div class="num">1</div><div>
+      <h3>La entrada</h3>
+      <p>El alumnado entra con el código de la asignatura (o con el enlace que ya lo lleva dentro) y, la primera vez,
+        elige a su docente. Arriba a la derecha aparece «Grupo de …», y cada alumno ve los Genially de su docente
+        (si los ha copiado) o los de Ascen.</p>
+      <a class="boton" href="mapa.html?demo=docentes" target="_blank" rel="noopener">Ver la entrada</a>
+    </div></div>
+
+    <div class="paso"><div class="num">2</div><div>
+      <h3>Mapa · el panel de control</h3>
+      <p>El panel de Genially con los enclaves, que se abren según la programación. Abajo a la derecha, el botón
+        <b>Retos</b>: el Acuerdo de Confidencialidad y los retos ya abiertos, cada uno con su ventana y el botón para registrarlo.</p>
+      <a class="boton" href="mapa.html?demo=1" target="_blank" rel="noopener">Ver el Mapa</a>
+    </div></div>
+
+    <div class="paso"><div class="num">3</div><div>
+      <h3>Sesiones</h3>
+      <p>Una pestaña por semana, abajo, que aparece el lunes de esa semana, cada una con su Genially a pantalla completa.
+        En la <b>Presentación</b> (el Consejo de las Grandes Casas) está el botón del Acuerdo de Confidencialidad, y en la
+        <b>Semana 1</b>, el del Reto 1.</p>
+      <a class="boton" href="sesiones.html?demo=1#presentacion" target="_blank" rel="noopener">Ver Sesiones</a>
+    </div></div>
+
+    <div class="paso"><div class="num">4</div><div>
+      <h3>Actividades</h3>
+      <p>Una pestaña por actividad evaluable, con su Genially.</p>
+      <a class="boton" href="actividades.html?demo=1" target="_blank" rel="noopener">Ver Actividades</a>
+    </div></div>
+
+    <div class="paso"><div class="num">5</div><div>
+      <h3>Insignias</h3>
+      <p>Las ocho insignias de los enclaves y el botón «¡Registra tus retos!», que abre el formulario.</p>
+      <a class="boton" href="insignias.html?demo=1" target="_blank" rel="noopener">Ver Insignias</a>
+    </div></div>
+
+    <div class="paso"><div class="num">6</div><div>
+      <h3>Clasificación</h3>
+      <p>Un único ranking con todo el alumnado que ha superado algún reto: podio y tabla. Cada alumno escribe su nombre
+        de mediador en «¿Quién eres, Mediador/a?». Prueba con:</p>
+      <ul>
+        <li><b>Sable</b>: está casi al final; la página baja sola hasta su fila.</li>
+        <li><b>Ammara</b>: va primera, en el centro del podio.</li>
+        <li><b>Lumen</b>: pulsa «Ver mi ficha» para ver su rango, sus insignias y su próximo enclave.</li>
+        <li><b>Cartógrafa Nómada</b>: solo ha firmado el Acuerdo; no sale en la tabla, pero puede ver su ficha.</li>
+      </ul>
+      <a class="boton" href="clasificacion.html?demo=1" target="_blank" rel="noopener">Ver la Clasificación</a>
+    </div></div>
+
+    <div class="paso"><div class="num">7</div><div>
+      <h3>Ver la web otro día</h3>
+      <p>Para comprobar cómo se irán abriendo semanas y enclaves, por ejemplo el 20 de noviembre:</p>
+      <a class="boton" href="sesiones.html?demo=1&amp;hoy=2026-11-20#presentacion" target="_blank" rel="noopener">Sesiones el 20 de noviembre</a>
+      <a class="boton sec" href="mapa.html?demo=1&amp;hoy=2026-11-20" target="_blank" rel="noopener">Mapa el 20 de noviembre</a>
+    </div></div>
+  </section>
+
+  <!-- 2. Enlaces -->
+  <section class="panel" id="enlaces">
+    <h2>Enlaces y datos de acceso</h2>
+    <table class="tabla">
+      <tr><th>Qué</th><th>Dónde</th></tr>
+      <tr><td>Web de Qareth (entra directamente)</td><td><a href="https://qareth-unir.pages.dev/?codigo=PAD18D" target="_blank" rel="noopener">qareth-unir.pages.dev/?codigo=PAD18D</a></td></tr>
+      <tr><td>Web sin código en el enlace</td><td><a href="https://qareth-unir.pages.dev" target="_blank" rel="noopener">qareth-unir.pages.dev</a></td></tr>
+      <tr><td>Código de la asignatura</td><td>PAD18D</td></tr>
+      <tr><td>Formulario «¡Registra tus retos!»</td><td><a href="https://docs.google.com/forms/d/1_QgD9tH6F2-cyIJlcHl9Vila79fbH2DQYrd6_GSmVyQ/viewform" target="_blank" rel="noopener">Abrir el formulario</a></td></tr>
+      <tr><td>Tu listado privado</td><td>Hoja de cálculo «Qareth · Mediadores de [tu nombre]». Te llegó un aviso de Google a tu correo para abrirla (también está en Google Drive, en «Compartido conmigo»)</td></tr>
+    </table>
+    <p>En tu listado privado ves solo a tu alumnado: nombre, apellidos, correo, nombre de mediador, fecha del Acuerdo,
+      puntos y, por cada reto, la fecha y el enlace a la evidencia. Se actualiza solo con cada envío del formulario.</p>
+  </section>
+
+  <!-- 3. Copias de Genially -->
+  <section class="panel" id="copias">
+    <h2>Si haces copias de los Genially</h2>
+    <p>Es opcional: lo que no copies, tu alumnado lo verá con la versión de Ascen.</p>
+    <ol>
+      <li>Copia en tu espacio de Genially el panel de control y los Genially que quieras adaptar.</li>
+      <li>En tu copia del panel, cambia el enlace de cada enclave para que lleve a tus copias.</li>
+      <li>Publica tus copias.</li>
+      <li>Envía a Ascen los enlaces, indicando a qué corresponde cada uno: Panel, Presentación, Semana X o Actividad X.</li>
+      <li>Desde ese momento, tu alumnado ve tus copias en las pestañas Mapa, Sesiones y Actividades de la web.</li>
+    </ol>
+    <p>Si después editas tus copias, los cambios se ven solos. Solo si creas un Genially nuevo, con otro enlace, tienes que
+      enviarle a Ascen el enlace nuevo.</p>
+  </section>
+
+  <!-- 4. Qué explicar -->
+  <section class="panel" id="explicar">
+    <h2>Qué explicar al alumnado el primer día</h2>
+    <ol>
+      <li>Entrar en la web con el enlace <code>https://qareth-unir.pages.dev/?codigo=PAD18D</code> (o con el código
+        de acceso <b>PAD18D</b>) y, la primera vez, elegir a su docente.</li>
+      <li>Participar en los retos es voluntario. Quien no participe puede alcanzar igualmente la máxima calificación.</li>
+      <li>Quien quiera participar rellena primero el <a href="https://docs.google.com/forms/d/1_QgD9tH6F2-cyIJlcHl9Vila79fbH2DQYrd6_GSmVyQ/viewform" target="_blank" rel="noopener">formulario «¡Registra tus retos!»</a>
+        eligiendo «Acuerdo de Confidencialidad»: docente, nombre, apellido, nombre de mediador y, si quiere, su avatar.</li>
+      <li>Siempre con la misma cuenta de Google: la del Acuerdo y la de todos los retos.</li>
+      <li>Para cada reto, una respuesta nueva con «Enviar otra respuesta», contestando «Sí» y pegando el enlace a su
+        evidencia. «Modificar respuesta» sirve solo para corregir un envío.</li>
+      <li>Para el avatar, suben su imagen a Postimages y pegan el enlace directo, el que empieza por <code>https://i.postimg.cc/</code>.
+        Sin avatar, aparece la inicial de su nombre de mediador.</li>
+      <li>Cada reto vale 300 puntos. Los enclaves, con sus retos, se abren según la programación.</li>
+      <li>En Clasificación está el ranking de todo el alumnado que ha superado algún reto. Cada uno escribe su nombre de
+        mediador para encontrarse y ver su ficha con sus insignias.</li>
+    </ol>
+  </section>
+
+  <!-- 5. Mensajes semanales del Foro de dinamización (js/foro.js) -->
+  <section class="panel" id="foro">
+    <h2>Mensajes del Foro de dinamización</h2>
+    <p>Un mensaje por semana para el Foro de dinamización de la asignatura en Moodle.</p>
+    <p class="nota">Primero elige tu firma: «— La Casa de …, voz del Consejo de las Grandes Casas».</p>
+    <div class="foro-firma" id="foroFirma"></div>
+
+    <h3 class="foro-h3">Opción recomendada: un recuadro que cambia solo</h3>
+    <p>Pega este código <b>una sola vez</b> en el Foro de dinamización. Cada lunes mostrará solo el mensaje de la semana
+      nueva, con tu firma; las semanas pasadas se pueden volver a ver y las futuras salen con candado.</p>
+    <ol>
+      <li>Pulsa «Copiar el código».</li>
+      <li>En Moodle, abre el editor del Foro de dinamización (su descripción o un mensaje fijado).</li>
+      <li>En la barra del editor, pulsa el botón de <b>código HTML</b> (&lt;/&gt;), pega el código y vuelve al modo normal.</li>
+      <li>Guarda. Deberías ver el recuadro con el mensaje de la semana.</li>
+    </ol>
+    <pre class="mensaje foro-codigo" id="foroCodigo"></pre>
+    <button class="boton" type="button" id="foroCopiarCodigo">Copiar el código</button><span class="copiado" hidden>Copiado</span>
+    <a class="boton sec" id="foroVer" href="foro.html" target="_blank" rel="noopener">Ver el recuadro</a>
+    <p class="nota">Si Moodle borra el recuadro al guardar (algunos Moodle no dejan insertar páginas externas), usa la otra
+      opción: copiar cada semana el mensaje.</p>
+
+    <h3 class="foro-h3">Otra opción: copiar cada semana el mensaje</h3>
+    <p>La semana en curso aparece abierta; pulsa en cualquier otra para verla. «Copiar el mensaje» lo copia con sus
+      negritas, viñetas y enlaces, listo para pegar en el foro. El título sirve de asunto.</p>
+    <div id="foroMensajes"></div>
+  </section>
+
+  <!-- 6. Durante el curso -->
+  <section class="panel" id="curso">
+    <h2>Durante el curso</h2>
+    <ul>
+      <li>Las semanas, los enclaves y las actividades se abren solos en su fecha, siguiendo la programación semanal.</li>
+      <li>Revisa las evidencias en tu listado privado. Si alguna no es válida, díselo a Ascen para que la anule.
+        Para abrir el listado, busca en tu correo el aviso de Google en el que se compartió contigo la hoja de
+        cálculo «Qareth · Mediadores de [tu nombre]» y pulsa «Abrir». También la encontrarás en Google Drive, en
+        «Compartido conmigo».</li>
+      <li>Si alguien elige mal a su docente al entrar en la web, que te escriba. Dile en privado que abra la web en
+        otro navegador o en el móvil y elija bien. Sus retos, sus puntos y tu listado no cambian.</li>
+      <li>Para dudas o problemas con la web o el formulario, escribe a Ascen.</li>
+    </ul>
+  </section>
+
+  <p class="nota">Para volver a la web real, cierra las pestañas de la demostración o pulsa «salir» en la marca
+    «Demostración» de arriba.</p>
+</main>
+
+<footer class="pie">
+  <p>Creación de Contenidos Educativos con Inteligencia Artificial · Máster Universitario en Aplicaciones Educativas de la IA. Universidad Internacional de la Rioja (UNIR)</p>
+</footer>
+
+<script src="js/foro.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clasificación · Qareth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilos.css">
+<script src="js/config.js"></script>
+<script src="js/acceso.js"></script>
+</head>
+<body>
+
+<header class="barra">
+  <a class="marca" href="index.html">Qareth</a>
+  <nav>
+    <a href="mapa.html">Mapa</a>
+    <a href="sesiones.html">Sesiones</a>
+    <a href="actividades.html">Actividades</a>
+    <a href="talleres.html">Talleres</a>
+    <a href="insignias.html">Insignias</a>
+    <a href="clasificacion.html" aria-current="page">Clasificación</a>
+  </nav>
+  <div class="enlaces" id="enlaces"></div>
+</header>
+
+<div class="aviso-demo" id="avisoDemo" hidden>
+  Modo demostración: los mediadores y sus logros son inventados.
+  <a id="demoAlterna" href="#"></a>
+</div>
+
+<main class="contenido">
+  <!-- Tablero: «¿Quién eres?» (buscador), podio de los tres primeros y tabla del grupo.
+       La ficha personal se abre en una ventana al pulsar la fila propia. -->
+  <section id="clasificacion">
+    <h2 class="titulo"><span>Clasificación de los mediadores</span></h2>
+    <div class="panel quien" id="quien">
+      <div class="cargando">Consultando la Gran Esfera Armilar…</div>
+    </div>
+    <div class="podio" id="podio"></div>
+    <ol class="ranking" id="ranking"></ol>
+  </section>
+</main>
+
+<footer class="pie">
+  <p>Creación de Contenidos Educativos con Inteligencia Artificial · Máster Universitario en Aplicaciones Educativas de la IA. Universidad Internacional de la Rioja (UNIR)</p>
+</footer>
+
+<dialog id="ventana">
+  <button class="cerrar" id="cerrar" aria-label="Cerrar">×</button>
+  <div id="ventanaCuerpo"></div>
+</dialog>
+
+<script src="js/app.js"></script>
+</body>
+</html>

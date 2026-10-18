@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actividades · Qareth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/sesiones.css">
+<script src="js/config.js"></script>
+<script src="js/acceso.js"></script>
+</head>
+<body class="pagina-sesiones">
+
+<header class="barra">
+  <a class="marca" href="index.html">Qareth</a>
+  <nav>
+    <a href="mapa.html">Mapa</a>
+    <a href="sesiones.html">Sesiones</a>
+    <a href="actividades.html" aria-current="page">Actividades</a>
+    <a href="talleres.html">Talleres</a>
+    <a href="insignias.html">Insignias</a>
+    <a href="clasificacion.html">Clasificación</a>
+  </nav>
+</header>
+
+<main class="escenario" id="escenario"></main>
+
+<nav class="pestanas-sesion" id="pestanas" aria-label="Actividades"></nav>
+
+<script src="js/programacion.js"></script>
+<script src="js/diapos.js"></script>
+<script>
+  // Una pestaña por cada actividad que ya tiene su Genially (GENIALLY_ACTIVIDAD, en programacion.js).
+  // Mientras no haya ninguno, se ve la diapositiva con las tres actividades.
+  // Cada Genially es el del docente del alumno (si tiene copia) o el de Ascen.
+  const conGenially = ACTIVIDADES
+    .map((a) => ({ ...a, g: ACCESO.genially("Actividad " + a.n, GENIALLY_ACTIVIDAD[a.n]) }))
+    .filter((a) => a.g.url);
+
+  function mostrarActividad(n) {
+    const a = conGenially.find((x) => x.n === n) || conGenially[0];
+    pintarDiapo(diapoGenially(a.g.url, `Actividad ${a.n}`, "img/mapa.jpg"));
+    ACCESO.rotular("Actividad " + a.n, a.g);
+    $("#pestanas").innerHTML = conGenially.map((x) =>
+      `<button type="button" data-n="${x.n}" aria-current="${x.n === a.n}">Actividad ${x.n}</button>`).join("");
+    if (location.hash !== "#actividad-" + a.n) history.replaceState(null, "", "#actividad-" + a.n);
+  }
+
+  if (conGenially.length) {
+    $("#pestanas").addEventListener("click", (ev) => {
+      const b = ev.target.closest("[data-n]");
+      if (b) mostrarActividad(Number(b.dataset.n));
+    });
+    mostrarActividad(Number(location.hash.replace("#actividad-", "")));
+  } else {
+    document.body.classList.add("sin-pestanas");
+    pintarDiapo(diapoActividades());
+  }
+</script>
+</body>
+</html>
