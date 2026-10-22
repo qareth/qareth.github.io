@@ -18,7 +18,7 @@ const HERALDA_FAQ = [
     r: () => "No. Los retos son voluntarios y sirven como entrenamiento. Las Actividades 1, 2 y 3 son las evaluables oficiales y las hace todo el alumnado. Aunque no participes en Qareth, puedes sacar la máxima nota." },
   { id: "clasificacion", boton: "¿Por qué no salgo en la Clasificación?",
     claves: ["clasificacion", "ranking", "salgo", "aparezco", "aparece", "tabla", "puesto", "encuentro"],
-    r: () => "Solo aparece quien tiene al menos un reto registrado. Recuerda utilizar siempre el mismo correo. Escribe tu nombre de mediador/a exactamente igual que en el formulario. Los datos tardan unos minutos en actualizarse." },
+    r: () => "Solo aparece quien tiene al menos un reto registrado. Firmar el Acuerdo de Confidencialidad no da puntos de experiencia ni insignia. Recuerda utilizar siempre el mismo correo. Escribe tu nombre de mediador/a exactamente igual que en el formulario. Los datos tardan unos minutos en actualizarse." },
   { id: "abre", boton: "¿Cuándo se abre cada enclave?",
     claves: ["cuando", "abre", "abren", "enclave", "enclaves", "orden", "cierra", "plazo", "fecha"],
     r: () => "Cada enclave se abre la semana en que empieza su tema, cuando se explica en clase. Hasta entonces no puedes hacer su reto: si lo registras antes, no cuenta. Una vez abierto, ya no se cierra." },
