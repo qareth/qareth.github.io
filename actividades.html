@@ -36,9 +36,10 @@
   // Una pestaña por cada actividad que ya tiene su Genially (GENIALLY_ACTIVIDAD, en programacion.js).
   // Mientras no haya ninguno, se ve la diapositiva con las tres actividades.
   // Cada Genially es el del docente del alumno (si tiene copia) o el de Ascen.
+  // Cada actividad aparece el lunes de la semana en que se presenta (en la demostración, todas).
   const conGenially = ACTIVIDADES
     .map((a) => ({ ...a, g: ACCESO.genially("Actividad " + a.n, GENIALLY_ACTIVIDAD[a.n]) }))
-    .filter((a) => a.g.url);
+    .filter((a) => a.g.url && (ACCESO.demo || abierto(SEMANAS.find((s) => s.n === a.presentacion).inicio)));
 
   function mostrarActividad(n) {
     const a = conGenially.find((x) => x.n === n) || conGenially[0];
@@ -60,5 +61,6 @@
     pintarDiapo(diapoActividades());
   }
 </script>
+<script src="js/heralda.js"></script>
 </body>
 </html>

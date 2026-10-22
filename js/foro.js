@@ -382,6 +382,53 @@ function foroCodigoMoodle(ap) {
   return `<iframe src="${foroEnlace(ap)}" width="100%" height="900" style="border:0;" title="Qareth · Foro de dinamización"></iframe>`;
 }
 
+// Código del recuadro de UNA semana, para pegar en el foro con el botón </> de Moodle
+// (Moodle rechaza el iframe). Misma estructura que el que Alicia publica sin problemas:
+// sin JavaScript ni bloque <style>; cada estilo dentro de su etiqueta. Semanas futuras con candado.
+const FORO_TIT = "font-family:Cinzel,'Times New Roman',serif;";
+const FORO_CIRCULO = `display:inline-block;width:32px;height:32px;line-height:32px;text-align:center;border-radius:50%;margin:0 2px 4px 0;${FORO_TIT}`;
+const FORO_ESTILO = {
+  caja: "background-color:#120d08;background-image:radial-gradient(at 50% 0%, #2a1d10 0%, #120d08 60%);color:#efe3c8;font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.5;padding:16px;border-radius:10px;",
+  tabla: "width:100%;border-collapse:collapse;margin-bottom:10px;",
+  eyebrow: `border:0;padding:0;${FORO_TIT}font-size:12px;letter-spacing:1.44px;text-transform:uppercase;color:#d8a84e;`,
+  semana: `border:0;padding:0;text-align:right;${FORO_TIT}font-size:17px;color:#f3d38a;`,
+  ahora: "font-size:11px;color:#1b1209;background-color:#d8a84e;border-radius:999px;padding:2px 9px;margin-left:6px;",
+  n: `${FORO_CIRCULO}border:1px solid #6b5330;color:#d8a84e;`,
+  on: `${FORO_CIRCULO}background-color:#d8a84e;color:#1b1209;font-weight:600;`,
+  futura: `${FORO_CIRCULO}border:1px solid #3d2e18;font-size:11px;`,
+  tarjeta: "background-color:#20170e;border:1px solid #6b5330;border-radius:10px;padding:16px 19px 10px;",
+  h: `${FORO_TIT}font-size:19px;font-weight:400;line-height:1.5;color:#f3d38a;margin:0 0 3px;`,
+  cab: "color:#b9a682;margin:0 0 14px;",
+  p: "margin:0 0 14px;",
+  ul: "margin:0 0 14px;padding-left:20px;",
+  li: "margin-bottom:5px;",
+  a: "color:#f3d38a;",
+};
+function foroCodigoSemana(m, ap) {
+  const S = FORO_ESTILO;
+  const nav = FORO.map((x) =>
+    x.n > m.n ? `<span style="${S.futura}">🔒</span>`
+      : `<span style="${x.n === m.n ? S.on : S.n}">${x.n}</span>`).join("\n");
+  const msg = foroCuerpo(m, ap).html
+    .replace(/<(\/?)b>/g, "<$1strong>")
+    .replace(/<(p|ul|li)>/g, (t, e) => `<${e} style="${S[e]}">`)
+    .replace(/<a href="([^"]+)"[^>]*>/g, `<a href="$1" style="${S.a}">`)
+    .replace(/<\/(p|ul|li)>/g, "</$1>\n");
+  return `<div style="${S.caja}">
+<table style="${S.tabla}"><tbody><tr>
+<td style="${S.eyebrow}">Foro de dinamización · Qareth</td>
+<td style="${S.semana}">Semana ${m.n} de ${FORO.length} <span style="${S.ahora}">Esta semana</span></td>
+</tr></tbody></table>
+<p style="margin:0 0 14px;">
+${nav}
+</p>
+<div style="${S.tarjeta}">
+<h3 style="${S.h}">${foroEsc(m.titulo)}</h3>
+<p style="${S.cab}">${foroEsc(m.cabecera)}</p>
+${msg}</div>
+</div>`;
+}
+
 // ---------------------------------------------------------------------
 //  Guía docente (demo.html): todos los mensajes para copiar
 // ---------------------------------------------------------------------
@@ -422,7 +469,8 @@ function foroCodigoMoodle(ap) {
         <summary><span class="foro-tit">${esc(m.titulo)}</span>${m.n === actual ? '<span class="foro-ahora">Esta semana</span>' : ""}
           <span class="foro-cab">${esc(m.cabecera)}</span></summary>
         <div class="mensaje foro-msg" id="foro${m.n}">${c.html}</div>
-        <button class="boton" type="button" data-foro="${m.n}">Copiar el mensaje</button><span class="copiado" hidden>Copiado</span>
+        <button class="boton" type="button" data-codigo="${m.n}">Copiar el código para Moodle</button><span class="copiado" hidden>Copiado</span>
+        <button class="boton sec" type="button" data-foro="${m.n}">Copiar el mensaje</button><span class="copiado" hidden>Copiado</span>
         <p class="nota">${esc(m.nota)}</p>
       </details>`;
     }).join("");
@@ -445,6 +493,20 @@ function foroCodigoMoodle(ap) {
   }
 
   // Copiar: con formato (negritas, viñetas, enlaces) y, si no se puede, como texto
+  // Copiar el código del recuadro de esa semana (como texto, para pegarlo en </>)
+  caja.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-codigo]"); if (!b) return;
+    const m = FORO.find((x) => x.n === Number(b.dataset.codigo));
+    const codigo = foroCodigoSemana(m, firma);
+    try { await navigator.clipboard.writeText(codigo); }
+    catch (err) {
+      const t = document.createElement("textarea"); t.value = codigo; document.body.appendChild(t);
+      t.select(); document.execCommand("copy"); t.remove();
+    }
+    const aviso = b.nextElementSibling; aviso.hidden = false;
+    setTimeout(() => { aviso.hidden = true; }, 2500);
+  });
+
   caja.addEventListener("click", async (e) => {
     const b = e.target.closest("[data-foro]"); if (!b) return;
     const m = FORO.find((x) => x.n === Number(b.dataset.foro));

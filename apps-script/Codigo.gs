@@ -10,7 +10,8 @@
  *     apellidos, nombre de mediador (seudónimo) y enlace al avatar (opcional).
  *     Se hace una vez; si se repite, cuenta el más reciente (sirve para corregir datos).
  *   · Reto 1 … Reto 8: suma el reto a quien lo envía (se identifica por el correo),
- *     salvo que haya respondido «No» en «¿Has …?». Se guarda el enlace a la evidencia.
+ *     salvo que haya respondido «No» en «¿Has …?» o que lo registre antes de que
+ *     se abra (APERTURA_RETOS). Se guarda el enlace a la evidencia.
  *
  * Para ver la web hay que escribir el código de la asignatura (pestaña «Acceso»).
  * A la web solo llegan alias, docente, avatar y fechas de los retos de quien
@@ -25,6 +26,12 @@ const CACHE_SEGUNDOS = 60;
 const PUNTOS_POR_RETO = 300;
 const HOJA_DOCENTES = 'Docentes';
 const HOJA_ACCESO = 'Acceso';
+// Día en que se abre cada reto (las mismas fechas que RETOS[].abre en js/config.js).
+// Un reto registrado antes de esa fecha no cuenta; una vez abierto, no se cierra.
+const APERTURA_RETOS = {
+  1: '2026-10-12', 2: '2026-10-26', 3: '2026-11-02', 4: '2026-11-16',
+  5: '2026-11-30', 6: '2026-12-07', 7: '2027-01-11', 8: '2027-01-25',
+};
 
 // ---------------------------------------------------------------------
 //  Web
@@ -164,6 +171,7 @@ function leerMediadores_() {
     // Si en «¿Has …?» ha respondido «No», ese envío no cuenta.
     if (colsConfirma.some(c => /^\s*no\s*$/i.test(texto(fila, c)))) return;
     const fecha = Utilities.formatDate(fila[col.fecha], tz, 'yyyy-MM-dd');
+    if (fecha < APERTURA_RETOS[n]) return;        // registrado antes de abrirse: no cuenta
     if (!p.retos[n]) p.retos[n] = fecha;          // si se repite un reto, cuenta la primera vez
     const enlace = colsEnlace.map(c => texto(fila, c)).find(Boolean);
     if (enlace) p.evidencias[n] = enlace;         // el enlace más reciente es el que se guarda
