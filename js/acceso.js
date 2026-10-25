@@ -5,6 +5,20 @@
 //  pulsar «Salir» o hasta que se cambie el código en la hoja.
 // =====================================================================
 
+// La web oficial es qareth.github.io (la de Cloudflare se queda sin servicio con los bloqueos
+// de LaLiga). Quien entre por la dirección antigua pasa allí con su código y su docente,
+// para no tener que escribirlos otra vez.
+if (location.hostname === "qareth-unir.pages.dev") {
+  document.documentElement.style.visibility = "hidden";
+  const p = new URLSearchParams(location.search);
+  try {
+    const c = localStorage.getItem("qareth-codigo"), d = localStorage.getItem("qareth-docente");
+    if (c && !p.has("codigo")) p.set("codigo", c);
+    if (d && !p.has("docente")) p.set("docente", d);
+  } catch { /* sin almacenamiento */ }
+  location.replace("https://qareth.github.io" + location.pathname + (p.size ? "?" + p : "") + location.hash);
+}
+
 const ACCESO = (() => {
   const CLAVE = "qareth-codigo";
   const CLAVE_DOCENTES = "qareth-codigo-docentes";
@@ -177,6 +191,17 @@ const ACCESO = (() => {
   // Sin botón para cambiar de docente: quien se equivoque entra con …/?cambiar-docente (lo da su docente).
   if (new URLSearchParams(location.search).has("cambiar-docente")) {
     try { localStorage.removeItem("qareth-docente" + sufijo); } catch { /* sin almacenamiento */ }
+  }
+
+  // Docente que trae quien viene de la dirección antigua (…?docente=Nombre); se guarda y se quita del enlace.
+  {
+    const params = new URLSearchParams(location.search);
+    const traido = params.get("docente");
+    if (traido !== null) {
+      if (!demo && !leerDocente()) { try { localStorage.setItem("qareth-docente", traido); } catch { /* sin almacenamiento */ } }
+      params.delete("docente");
+      history.replaceState(null, "", location.pathname + (params.size ? "?" + params : "") + location.hash);
+    }
   }
 
   const preguntarDocente = () => codigo && DOCENTES.length && !miDocente() && !window.QARETH_SIN_DOCENTE;
