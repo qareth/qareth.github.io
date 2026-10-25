@@ -86,7 +86,10 @@
   padding: 0.35rem 0.9rem 0.35rem 0.35rem; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
 }
 .reto-flotante img { width: 34px; height: 34px; }
-
+/* El botón del reto va en la barra de las pestañas, a la derecha (junto a la Heralda): no tapa el Genially */
+.diapo.completa .reto-flotante { position: fixed; right: 0.8rem; bottom: calc(0.35rem + env(safe-area-inset-bottom, 0px)); z-index: 31;
+  font-size: 0.8rem; padding: 0.2rem 0.8rem 0.2rem 0.2rem; box-shadow: none; }
+.diapo.completa .reto-flotante img { width: 26px; height: 26px; }
 .puntos-diapo { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.6rem; }
 .puntos-diapo a { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--oro); }
 .puntos-diapo a.on { background: var(--oro-claro); }

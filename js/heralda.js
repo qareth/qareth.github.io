@@ -82,6 +82,9 @@ const HERALDA_FAQ = [
   .heralda-panel { width: min(380px, calc(100vw - 2rem)); max-height: min(560px, 75vh); display: flex; flex-direction: column;
     background: rgba(20, 14, 8, 0.98); border: 1px solid var(--oro); border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); overflow: hidden; }
   .heralda-panel[hidden] { display: none; }
+  .heralda-flotante.en-barra { z-index: 31; }
+  .en-barra .heralda-boton { font-size: 0.8rem; padding: 0.2rem 0.8rem 0.2rem 0.2rem; box-shadow: none; }
+  .en-barra .heralda-boton .heralda-sello { flex-basis: 26px; height: 26px; font-size: 0.9rem; }
   .heralda-cab { display: flex; gap: 0.7rem; align-items: center; padding: 0.8rem 1rem; border-bottom: 1px solid var(--linea); }
   .heralda-cab .heralda-sello { flex-basis: 44px; height: 44px; font-size: 1.4rem; }
   .heralda-cab h3 { margin: 0; font-family: var(--titulos); color: var(--oro-claro); font-size: 1.05rem; }
@@ -135,10 +138,19 @@ const HERALDA_FAQ = [
     // Encima del botón «Retos» (y de su lista, si está abierta), del botón del reto de la sesión
     // o de las pestañas de abajo. Cambian al abrir la lista o de pestaña: se recoloca cada vez.
     function colocar() {
-      const encima = document.querySelector(".retos-flotante") || document.querySelector(".reto-flotante");
+      const encima = document.querySelector(".retos-flotante");
+      const reto = document.querySelector(".reto-flotante");
       const pestanas = document.querySelector(".pestanas-sesion");
+      caja.classList.toggle("en-barra", !encima && !!pestanas);
+      caja.style.right = "";
       if (encima) caja.style.bottom = (window.innerHeight - encima.getBoundingClientRect().top + 8) + "px";
-      else if (pestanas) caja.style.bottom = (pestanas.offsetHeight + 12) + "px";
+      // En la barra de las pestañas, a la izquierda del botón del reto; las pestañas dejan sitio.
+      else if (pestanas) {
+        const boton = caja.querySelector(".heralda-boton");
+        caja.style.bottom = Math.max(0, (pestanas.offsetHeight - boton.offsetHeight) / 2) + "px";
+        if (reto) caja.style.right = (window.innerWidth - reto.getBoundingClientRect().left + 8) + "px";
+        pestanas.style.paddingRight = (window.innerWidth - boton.getBoundingClientRect().left + 12) + "px";
+      }
     }
     colocar();
     new MutationObserver(colocar).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden"] });
