@@ -121,7 +121,39 @@ const CONFIG = {
 
   // Centro del mapa: el Consejo de las Grandes Casas / Gran Esfera Armilar.
   CENTRO: { x: 50, y: 45 },
+
+  // Ediciones que empiezan en otra fecha. El alumnado de estas docentes ve las semanas,
+  // enclaves y actividades con estas fechas (lunes de las semanas 1 a 15, de su programación).
+  // Quien tenga otra docente sigue con las fechas de octubre (RETOS[].abre y programacion.js).
+  // Las mismas fechas de apertura de los retos van en APERTURA_POR_DOCENTE de Codigo.gs.
+  EDICIONES: [
+    {
+      nombre: "Noviembre", docentes: ["Patricia del Castillo"],
+      semanas: ["2026-11-16", "2026-11-23", "2026-11-30", "2026-12-07", "2026-12-14",
+                "2027-01-11", "2027-01-18", "2027-01-25", "2027-02-01", "2027-02-08",
+                "2027-02-15", "2027-02-22", "2027-03-01", "2027-03-08", "2027-03-15"],
+    },
+  ],
+  // Semana en la que se abre cada reto (la primera de su tema).
+  SEMANA_DE_RETO: { 1: 1, 2: 2, 3: 3, 4: 5, 5: 7, 6: 8, 7: 11, 8: 13 },
 };
+
+// Aplica las fechas de la edición de la docente elegida (lo llama acceso.js).
+// Para previsualizar otra edición: ?edicion=noviembre (se mantiene al cambiar de página;
+// ?edicion= sin nada vuelve a la normal). Se combina con ?hoy=.
+function aplicarEdicion(docente) {
+  let pedida = null;
+  try {
+    const p = new URLSearchParams(location.search);
+    if (p.has("edicion")) p.get("edicion") ? sessionStorage.setItem("qareth-edicion", p.get("edicion")) : sessionStorage.removeItem("qareth-edicion");
+    pedida = sessionStorage.getItem("qareth-edicion");
+  } catch { /* sin almacenamiento */ }
+  const ed = CONFIG.EDICIONES.find((e) => pedida ? e.nombre.toLowerCase() === pedida.toLowerCase() : e.docentes.includes(docente));
+  if (!ed) return null;
+  CONFIG.RETOS.forEach((r) => { r.abre = ed.semanas[CONFIG.SEMANA_DE_RETO[r.n] - 1]; });
+  window.QARETH_EDICION = ed;
+  return ed;
+}
 
 // ---------------------------------------------------------------------
 //  Calendario: cada enclave (abre) y cada semana (inicio, en programacion.js)

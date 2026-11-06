@@ -80,6 +80,8 @@ const SEMANAS = [
   { n: 14, inicio: "2027-02-01", bloque: 3, tema: 8, continuacion: true, clases: [[21, 60, "Problema", "¿Qué límites éticos deben considerarse al utilizar inteligencia artificial en la evaluación educativa?"], [22, 120, "", "Taller práctico virtual"]] },
   { n: 15, inicio: "2027-02-08", bloque: 3, tema: null, titulo: "Semana de repaso", clases: [[23, 60, "", "Sesión de repaso"]] },
 ];
+// Otra edición (p. ej., noviembre): sus propias fechas (CONFIG.EDICIONES en config.js).
+if (window.QARETH_EDICION) SEMANAS.forEach((s, i) => { s.inicio = window.QARETH_EDICION.semanas[i]; });
 
 // Genially embebidos.
 // La presentación de la asignatura ocupa la pestaña Presentación.

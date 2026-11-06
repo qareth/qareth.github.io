@@ -252,7 +252,7 @@ function pintarInsignias() {
   }).join("");
 }
 
-// Tablero: un único ranking con todo el alumnado (todos los grupos): podio de los tres primeros y tabla.
+// Tablero: un ranking con todo el alumnado de la edición (todos sus grupos): podio de los tres primeros y tabla.
 // De cada mediador solo se ven el avatar, el alias, las conexiones y los puntos; la fila propia, resaltada.
 function pintarRanking() {
   const ol = $("#ranking");
@@ -376,8 +376,13 @@ function iniciarVideoEntrada() {
 //  Arranque
 // ---------------------------------------------------------------------
 
+// Cada edición tiene su propia clasificación: solo se ven los mediadores de la edición de quien mira
+// (las docentes de CONFIG.EDICIONES, p. ej. noviembre; el resto, la de siempre).
+const nombreEdicion = (docente) => (CONFIG.EDICIONES.find((e) => e.docentes.includes(docente)) || {}).nombre || "";
+const deMiEdicion = (m) => ACCESO.demo || nombreEdicion(m.docente) === ((window.QARETH_EDICION || {}).nombre || "");
+
 function aplicarDatos(datos) {
-  estado.mediadores = prepararMediadores(datos.mediadores || []);
+  estado.mediadores = prepararMediadores((datos.mediadores || []).filter(deMiEdicion));
   const pedido = new URLSearchParams(location.search).get("nick") || leerPreferencia();
   estado.yo = pedido ? estado.mediadores.find((m) => m.alias.toLowerCase() === pedido.toLowerCase()) || null : null;
   pintarTodo();

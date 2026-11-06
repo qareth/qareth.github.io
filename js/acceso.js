@@ -204,6 +204,9 @@ const ACCESO = (() => {
     }
   }
 
+  // Fechas de la edición de su docente (p. ej., el grupo de noviembre).
+  aplicarEdicion(leerDocente());
+
   const preguntarDocente = () => codigo && DOCENTES.length && !miDocente() && !window.QARETH_SIN_DOCENTE;
   if (preguntarDocente()) document.documentElement.classList.add("puerta-abierta");
 
