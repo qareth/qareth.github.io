@@ -7,10 +7,10 @@
 const PRESENTACION_G = ACCESO.genially("Presentación", GENIALLY_PRESENTACION);
 
 const PESTANAS = [
-  // La presentación es el Genially, a pantalla completa.
-  { id: "presentacion", nombre: "Presentación", g: PRESENTACION_G, diapos: [
+  // La presentación es el Genially, a pantalla completa. Aparece con la Semana 1 de la edición del alumno.
+  ...(abierto(SEMANAS[0].inicio) ? [{ id: "presentacion", nombre: "Presentación", g: PRESENTACION_G, diapos: [
     () => diapoGenially(PRESENTACION_G.url, "Presentación de la asignatura", "img/mapa.jpg", "acuerdo"),
-  ] },
+  ] }] : []),
   // Cada semana muestra su Genially (GENIALLY_SEMANA); mientras no lo tenga, la diapositiva de la semana.
   // Cada semana aparece el lunes de esa semana (inicio, en programacion.js).
   ...SEMANAS.filter((s) => abierto(s.inicio)).map((s) => {
@@ -67,15 +67,21 @@ function mover(delta) {
 
 // La ventana del reto (botón sobre el Genially de cada semana) está en js/retos.js.
 
-$("#pestanas").addEventListener("click", (ev) => {
-  const b = ev.target.closest("[data-id]");
-  if (b) mostrar(b.dataset.id);
-});
-document.addEventListener("keydown", (ev) => {
-  if (ev.target.closest("input, textarea")) return;
-  if (ev.key === "ArrowRight") mover(1);
-  if (ev.key === "ArrowLeft") mover(-1);
-});
-window.addEventListener("hashchange", () => mostrar(location.hash.slice(1)));
+// Antes de que empiece su edición no hay nada abierto: solo la imagen del mapa.
+if (!PASOS.length) {
+  document.body.classList.add("sin-pestanas");
+  pintarDiapo({ fondo: "img/mapa.jpg", html: "" });
+} else {
+  $("#pestanas").addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-id]");
+    if (b) mostrar(b.dataset.id);
+  });
+  document.addEventListener("keydown", (ev) => {
+    if (ev.target.closest("input, textarea")) return;
+    if (ev.key === "ArrowRight") mover(1);
+    if (ev.key === "ArrowLeft") mover(-1);
+  });
+  window.addEventListener("hashchange", () => mostrar(location.hash.slice(1)));
 
-mostrar(location.hash.slice(1));
+  mostrar(location.hash.slice(1));
+}
