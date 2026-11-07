@@ -11,10 +11,12 @@
 //  (Alicia Moreno prefiere firmar con su nombre: «La Casa de Alicia».)
 // =====================================================================
 
-const FIRMAS = ["Robles", "Alicia", "Segura"];
+const FIRMAS = ["Robles", "Alicia", "Segura", "Patricia"];
 // Firmas antiguas que siguen funcionando (p. ej. un recuadro ya pegado con ?firma=Moreno)
 const FIRMAS_ANTIGUAS = { Moreno: "Alicia" };
 const foroFirmaValida = (f) => (FIRMAS.includes(f) ? f : FIRMAS_ANTIGUAS[f] || FIRMAS[0]);
+// Firmas de docentes de otra edición: sus mensajes llevan las fechas de esa edición (CONFIG.EDICIONES).
+const FIRMA_EDICION = { Patricia: "Noviembre" };
 
 const FORO = [
   {
@@ -77,6 +79,7 @@ const FORO = [
       "«No hace falta que recorras el mercado», ofrece. «Busco, redacto, resumo y presento. Todo aquí.»",
       "Antes de clase, visita uno de los puestos del mercado, un generador de prompts que promete que ChatGPT redactará tus unidades didácticas por ti:\nhttps://profesorproductivo.com/blog/generador-de-prompts-para-unidades-didacticas-con-chat-gpt/",
       "Fíjate en cómo construye el prompt y pregúntate qué parte de una unidad didáctica no dejarías nunca en sus manos.",
+      "https://www.youtube.com/watch?v=_r-KTBPHJyY",
       "**¿Te atreves a entrar en el mercado sin dejar que nadie elija por ti?**",
       "**ESTA SEMANA EN QARETH**",
       { lista: [
@@ -365,11 +368,39 @@ function foroCuerpo(m, ap) {
   return { html, texto };
 }
 
+// Mensajes con las fechas de la edición de esa firma (lunes y «16–20 nov» de la cabecera).
+const FORO_MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+function foroFechas(lunes) {
+  const a = new Date(lunes + "T12:00:00"), b = new Date(a); b.setDate(a.getDate() + 4);
+  return a.getMonth() === b.getMonth()
+    ? `${a.getDate()}–${b.getDate()} ${FORO_MESES[a.getMonth()]}`
+    : `${a.getDate()} ${FORO_MESES[a.getMonth()]} – ${b.getDate()} ${FORO_MESES[b.getMonth()]}`;
+}
+// Frases de las vacaciones de la edición de octubre (semanas 8 y 9): en otras ediciones no se ponen,
+// porque sus vacaciones caen en otra semana (cada docente añade a mano lo que quiera).
+const FORO_SOLO_OCTUBRE = [
+  "Será el enclave más largo del viaje: tres semanas, con las vacaciones en medio.",
+  "Después, el jardín se cierra por vacaciones.",
+  "**Felices fiestas, mediadores.**",
+];
+function foroLista(ap) {
+  const ed = typeof CONFIG !== "undefined" && FIRMA_EDICION[ap] && CONFIG.EDICIONES.find((e) => e.nombre === FIRMA_EDICION[ap]);
+  if (!ed) return FORO;
+  return FORO.map((m) => {
+    const inicio = ed.semanas[m.n - 1];
+    return {
+      ...m, inicio,
+      cabecera: m.cabecera.replace(/^[^·]*·/, foroFechas(inicio) + " ·"),
+      bloques: m.bloques.filter((b) => !FORO_SOLO_OCTUBRE.includes(b)),
+    };
+  });
+}
+
 // Semana en curso (admite ?hoy=AAAA-MM-DD para previsualizar). Antes del curso: semana 1.
-function foroSemanaActual() {
+function foroSemanaActual(lista = FORO) {
   const hoy = new URLSearchParams(location.search).get("hoy") || new Date().toISOString().slice(0, 10);
   let actual = 1;
-  FORO.forEach((m) => { if (m.inicio <= hoy) actual = m.n; });
+  lista.forEach((m) => { if (m.inicio <= hoy) actual = m.n; });
   return actual;
 }
 
@@ -441,7 +472,8 @@ ${msg}</div>
   let firma = FIRMAS[0];
   try { const f = localStorage.getItem("qareth-firma-foro"); if (f) firma = foroFirmaValida(f); } catch (e) {}
 
-  const actual = foroSemanaActual();
+  // Mensajes y semana en curso según la firma (Patricia: fechas de noviembre)
+  let lista = foroLista(firma), actual = foroSemanaActual(lista);
 
   // Código para pegar en Moodle (cambia con la firma)
   const codigoMoodle = document.getElementById("foroCodigo");
@@ -463,7 +495,7 @@ ${msg}</div>
 
   function pintar() {
     pintarCodigo();
-    caja.innerHTML = FORO.map((m) => {
+    caja.innerHTML = lista.map((m) => {
       const c = cuerpo(m, firma);
       return `<details class="foro-sem"${m.n === actual ? " open" : ""}>
         <summary><span class="foro-tit">${esc(m.titulo)}</span>${m.n === actual ? '<span class="foro-ahora">Esta semana</span>' : ""}
@@ -486,9 +518,12 @@ ${msg}</div>
       firma = b.dataset.firma;
       try { localStorage.setItem("qareth-firma-foro", firma); } catch (err) {}
       selector.querySelectorAll("[data-firma]").forEach((x) => x.classList.toggle("sec", x.dataset.firma !== firma));
+      const antes = actual;
+      lista = foroLista(firma); actual = foroSemanaActual(lista);
       const abiertas = [...caja.querySelectorAll("details")].map((d) => d.open);
       pintar();
-      caja.querySelectorAll("details").forEach((d, i) => { d.open = abiertas[i]; });
+      // Si con la nueva firma cambia la semana en curso, se abre esa; si no, se mantiene lo abierto.
+      if (actual === antes) caja.querySelectorAll("details").forEach((d, i) => { d.open = abiertas[i]; });
     });
   }
 
@@ -496,7 +531,7 @@ ${msg}</div>
   // Copiar el código del recuadro de esa semana (como texto, para pegarlo en </>)
   caja.addEventListener("click", async (e) => {
     const b = e.target.closest("[data-codigo]"); if (!b) return;
-    const m = FORO.find((x) => x.n === Number(b.dataset.codigo));
+    const m = lista.find((x) => x.n === Number(b.dataset.codigo));
     const codigo = foroCodigoSemana(m, firma);
     try { await navigator.clipboard.writeText(codigo); }
     catch (err) {
@@ -509,7 +544,7 @@ ${msg}</div>
 
   caja.addEventListener("click", async (e) => {
     const b = e.target.closest("[data-foro]"); if (!b) return;
-    const m = FORO.find((x) => x.n === Number(b.dataset.foro));
+    const m = lista.find((x) => x.n === Number(b.dataset.foro));
     const c = cuerpo(m, firma);
     try {
       await navigator.clipboard.write([new ClipboardItem({
@@ -539,12 +574,13 @@ ${msg}</div>
   if (!caja) return;
   const q = new URLSearchParams(location.search);
   const firma = foroFirmaValida(q.get("firma"));
-  const actual = foroSemanaActual();
+  const lista = foroLista(firma);
+  const actual = foroSemanaActual(lista);
   let vista = actual;
 
   function pintar() {
-    const m = FORO.find((x) => x.n === vista);
-    const nav = FORO.map((x) => x.n > actual
+    const m = lista.find((x) => x.n === vista);
+    const nav = lista.map((x) => x.n > actual
       ? `<span class="foro-n candado" title="Se abre el ${x.inicio.split("-").reverse().join("/")}">🔒</span>`
       : `<button type="button" class="foro-n${x.n === vista ? " on" : ""}" data-n="${x.n}" aria-label="Semana ${x.n}">${x.n}</button>`).join("");
     caja.innerHTML = `
