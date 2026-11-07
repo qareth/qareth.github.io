@@ -92,6 +92,7 @@ const GENIALLY_SEMANA = {
   1: "https://view.genially.com/6a6503eab32553b0625cfd64",
   2: "https://view.genially.com/6a8f0f554405b72ddafd85eb",
   3: "https://view.genially.com/6a9074098cc92b3e197e82f1",
+  4: "https://view.genially.com/6a9075c18cc92b3e197ed607",
 };
 
 // Genially de cada actividad (pestañas de la página Actividades). Ejemplo:

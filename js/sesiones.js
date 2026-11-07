@@ -43,7 +43,17 @@ function centrarPestana() {
 }
 if (document.fonts) document.fonts.ready.then(centrarPestana);
 
+// Enlace por tema (#tema-3): abre la última semana ya abierta de ese tema
+// (p. ej., el tema 3 tiene la Semana 3 y la 4). Si aún no hay ninguna, la primera pestaña.
+function deTema(hash) {
+  const m = /^tema-(\d+)$/.exec(hash);
+  if (!m) return hash;
+  const ultima = SEMANAS.filter((s) => s.tema === Number(m[1]) && abierto(s.inicio)).pop();
+  return ultima ? "semana-" + ultima.n : "";
+}
+
 function mostrar(hash) {
+  hash = deTema(hash);
   const paso = PASOS.find((x) => x.hash === hash) || PASOS[0];
   const p = paso.pestana;
   const puntos = p.diapos.length > 1
